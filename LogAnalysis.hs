@@ -41,7 +41,6 @@ whatWentWrong = map (\(LogMessage _ _ m) -> m) . inOrder . build . filter f
 
 getWarns :: [LogMessage] -> [String]
 getWarns = map (\(LogMessage _ _ m) -> m) . inOrder . build . filter f
-           where f (LogMessage Warning _ m)
-                   | elem ':' m             = False
-                   | otherwise              = True
+           where f (LogMessage Warning _ m) = not $ any id (map ((flip elem) punctuation) m)
                  f _                        = False
+                 punctuation = ":[]()*0123456789"
